@@ -1,8 +1,10 @@
 package com.example.springbootvalidation.controller;
 
+import com.example.springbootvalidation.exception.UserNotFoundException;
 import com.example.springbootvalidation.dto.UserRequest;
 import com.example.springbootvalidation.model.User;
 import com.example.springbootvalidation.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> createUser(@RequestBody UserRequest request) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid UserRequest request) {
         return new ResponseEntity<>(userService.saveUser(request), HttpStatus.CREATED);
 
     }
@@ -30,7 +32,7 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable int id) {
+    public ResponseEntity<User> getUserById(@PathVariable int id) throws UserNotFoundException {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
